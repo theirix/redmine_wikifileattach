@@ -1,0 +1,25 @@
+= Redmine Wikifileattach plugin
+
+Plugin allows to include dynamically updated wikipage from a file.
+
+== Installation
+
+Copy the plugin into the plugins directory and restart Redmine.
+
+Specify at the plugin settings a directory where wiki sources are stored.
+Only local pathes are allowed due to security reasons.
+Specified file is refeteched if it was updated.
+
+== Macro
+
+<tt>{{includewikifile(sourcefile.wiki)}}</tt>
+
+Fetches wikipage from the file and displays inline.
+
+<tt>{{includewikifile(sourcefile.wiki, AnotherWikiName)}}</tt>
+
+Fetches wikipage from the file to wikipage named AnotherWikiName and displays inline.
+
+<tt>{{referwikifile(sourcefile.wiki)}}</tt>
+
+Fetches wikipage from the file and displays nothing.

@@ -1,0 +1,7 @@
+# English strings go here for Rails i18n
+en:
+  wikifileattach:
+    greeting: 'Allows to include dynamically updated wikipage from a file'
+    directory:
+      label: 'Directory'
+      description: 'Contains sources for wiki pages'

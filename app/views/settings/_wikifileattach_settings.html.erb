@@ -1,0 +1,6 @@
+<%=t 'wikifileattach.greeting' %>
+
+<p><label><%=t 'wikifileattach.directory.label' %>: </label>
+<%= text_field_tag 'settings[wikifileattach_directory]', @settings['wikifileattach_directory'], :size => 100 %><br />
+<em><%=t 'wikifileattach.directory.description' %></em>
+</p>

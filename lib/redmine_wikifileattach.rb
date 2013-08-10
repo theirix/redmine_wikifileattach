@@ -1,0 +1,1 @@
+require 'redmine_wikifileattach/macro'
