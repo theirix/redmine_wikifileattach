@@ -18,7 +18,7 @@ module RedmineWikifileattach
         raise 'No wikipage directory specified' if settings_directory.empty?
         
         # check correct path
-        path = File.join(settings_directory, File.basename(filename))
+        path = File.join(settings_directory, filename)
         checked_path = File.expand_path(File.join(settings_directory, filename))
         raise "Suspicious filename #{checked_path}" if checked_path != path
         raise "File with wikipage is not found at path '#{path}'" if !File.file?(path)
