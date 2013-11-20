@@ -36,7 +36,7 @@ module RedmineWikifileattach
             # reload page
             Helper::log_it "Page is outdated (#{mtime} vs #{page.updated_on}), adding new version"
             page.content.text = IO.read(path)
-            page.save_with_content
+            page.save_with_content page.content
           end
         else
           # add page
