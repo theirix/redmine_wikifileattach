@@ -59,7 +59,7 @@ module RedmineWikifileattach
     macro :includewikifile do |obj, args|
       raise 'Wrong arguments of includewikifile macro ' if args.size < 1 || args.size > 2
       filename = args[0].to_s
-      wikiname = args[1].to_s
+      wikiname = args.size > 1 ? args[1].to_s : ''
       wikiname = File.basename(filename, File.extname(filename)) if wikiname.empty?
 
       Helper::ensure_wikipage filename, wikiname, @project, @page
@@ -70,7 +70,7 @@ module RedmineWikifileattach
     macro :referwikifile do |obj, args|
       raise 'Wrong arguments of referwikifile macro ' if args.size < 1 || args.size > 2
       filename = args[0].to_s
-      wikiname = args[1].to_s
+      wikiname = args.size > 1 ? args[1].to_s : ''
       wikiname = File.basename(filename, File.extname(filename)) if wikiname.empty?
     
       Helper::ensure_wikipage filename, wikiname, @project, @page
