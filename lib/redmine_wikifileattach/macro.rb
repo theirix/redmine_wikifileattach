@@ -9,14 +9,14 @@ module RedmineWikifileattach
       def log_it s
         Rails.logger.debug(s) if Rails.logger && Rails.logger.debug?
       end
-      
+
       def settings_directory
         Setting.plugin_redmine_wikifileattach['wikifileattach_directory']
       end
-      
+
       def ensure_wikipage filename, wikiname, project, current_page
         raise 'No wikipage directory specified' if settings_directory.empty?
-        
+
         # check correct path
         path = File.join(settings_directory, filename)
         checked_path = File.expand_path(File.join(settings_directory, filename))
@@ -27,7 +27,7 @@ module RedmineWikifileattach
 
         # find existing page
         page = Wiki.find_page(wikiname.to_s, :project => project)
-      
+
         if page
           page.destroy unless page.content
 
@@ -46,32 +46,32 @@ module RedmineWikifileattach
           new_page.build_content(author_id: User.anonymous.id, text: IO.read(path))
           new_page.save
         end
-        
+
       end
 
       def parse_macro_args args
-         raise 'Wrong arguments of macro ' if args.size < 1 || args.size > 2
-         filename = args[0].to_s
-         wikiname = args.size > 1 ? args[1].to_s : ''
-         wikiname = File.basename(filename, File.extname(filename)) if wikiname.empty?
-         [filename, wikiname]
+        raise 'Wrong arguments of macro ' if args.size < 1 || args.size > 2
+        filename = args[0].to_s
+        wikiname = args.size > 1 ? args[1].to_s : ''
+        wikiname = File.basename(filename, File.extname(filename)) if wikiname.empty?
+        [filename, wikiname]
       end
     end
   end
-    
+
   Redmine::WikiFormatting::Macros.register do
     desc "Include a wikipage from a file:\n\n" +
-    " @!{{includewikifile(filename, [wikiname])}}@\n"
+      " @!{{includewikifile(filename, [wikiname])}}@\n"
     " @!{{includewikicodefile(filename, [wikiname])}}@\n"
     " @!{{referwikifile(filename, [wikiname])}}@\n"
-    
+
     macro :includewikifile do |obj, args|
       filename, wikiname = Helper::parse_macro_args args
       Helper::ensure_wikipage filename, wikiname, @project, @page
-    
+
       textilizable("{{include(#{wikiname})}}")
     end
-    
+
     macro :includewikicodefile do |obj, args|
       filename, wikiname = Helper::parse_macro_args args
       Helper::ensure_wikipage filename, wikiname, @project, @page
@@ -85,9 +85,9 @@ module RedmineWikifileattach
     macro :referwikifile do |obj, args|
       filename, wikiname = Helper::parse_macro_args args
       Helper::ensure_wikipage filename, wikiname, @project, @page
-    
+
       ""
     end
-        
+
   end
 end
