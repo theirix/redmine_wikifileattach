@@ -48,31 +48,42 @@ module RedmineWikifileattach
         end
         
       end
+
+      def parse_macro_args args
+         raise 'Wrong arguments of macro ' if args.size < 1 || args.size > 2
+         filename = args[0].to_s
+         wikiname = args.size > 1 ? args[1].to_s : ''
+         wikiname = File.basename(filename, File.extname(filename)) if wikiname.empty?
+         [filename, wikiname]
+      end
     end
   end
     
   Redmine::WikiFormatting::Macros.register do
     desc "Include a wikipage from a file:\n\n" +
     " @!{{includewikifile(filename, [wikiname])}}@\n"
-    " @!{{referwikifile(filename, [wikiname])}}@\n"      
+    " @!{{includewikicodefile(filename, [wikiname])}}@\n"
+    " @!{{referwikifile(filename, [wikiname])}}@\n"
     
     macro :includewikifile do |obj, args|
-      raise 'Wrong arguments of includewikifile macro ' if args.size < 1 || args.size > 2
-      filename = args[0].to_s
-      wikiname = args.size > 1 ? args[1].to_s : ''
-      wikiname = File.basename(filename, File.extname(filename)) if wikiname.empty?
-
+      filename, wikiname = Helper::parse_macro_args args
       Helper::ensure_wikipage filename, wikiname, @project, @page
     
       textilizable("{{include(#{wikiname})}}")
     end
     
+    macro :includewikicodefile do |obj, args|
+      filename, wikiname = Helper::parse_macro_args args
+      Helper::ensure_wikipage filename, wikiname, @project, @page
+
+      # extracted from 'include' macro
+      page = Wiki.find_page(wikiname, :project => @project)
+      raise 'Page not found' if page.nil? || !User.current.allowed_to?(:view_wiki_pages, page.wiki.project)
+      textilizable("<pre\n>" + page.content.text + "</pre>", :attachments => page.attachments, :headings => false)
+    end
+
     macro :referwikifile do |obj, args|
-      raise 'Wrong arguments of referwikifile macro ' if args.size < 1 || args.size > 2
-      filename = args[0].to_s
-      wikiname = args.size > 1 ? args[1].to_s : ''
-      wikiname = File.basename(filename, File.extname(filename)) if wikiname.empty?
-    
+      filename, wikiname = Helper::parse_macro_args args
       Helper::ensure_wikipage filename, wikiname, @project, @page
     
       ""

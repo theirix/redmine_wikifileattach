@@ -16,6 +16,10 @@ Specified file is refeteched if it was updated.
 
 Fetches wikipage from the file and displays inline.
 
+<tt>{{includewikicodefile(sourcefile.wiki)}}</tt>
+
+Fetches wikipage from the file and displays inline using 'pre' code tags.
+
 <tt>{{includewikifile(sourcefile.wiki, AnotherWikiName)}}</tt>
 
 Fetches wikipage from the file to wikipage named AnotherWikiName and displays inline.
